@@ -1,10 +1,39 @@
 import React, { Component } from 'react';
 import Moment from 'react-moment';
+import axios from 'axios';
 
 import './GameSchedule.css';
 
 
 class GameSchedule extends Component {
+
+ constructor(props){
+   super(props)
+
+   this.state = {
+     openGame: []
+   }
+
+   this.handleClick = this.handleClick.bind(this);
+
+ }
+
+ handleClick(e){
+    console.log('click');
+    console.log(e.target.id);
+    //const id = e.target.id;
+    // const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    // const url = `https://www.atg.se/services/racinginfo/v1/api/games/${id}`;
+    // const res = axios.get(proxyurl + url)
+    //   .then(function (response) {
+    //     return response.data;
+    //   })
+    //   .catch(function (error) {
+    //     console.log('error', error)
+    //   });
+
+    //this.setState({openGame: res});
+  }
 
   render() {
 
@@ -13,20 +42,20 @@ class GameSchedule extends Component {
     const upcoming = data[0] ? data[0].data.upcoming : '';
     const results = data[0] ? data[0].data.results : '';
 
-    const listUpcoming = upcoming.map((item) => {
+    const listUpcoming = upcoming.map((item, idx) => {
       const dateToFormat = item.startTime;
       const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
         {dateToFormat}
       </Moment>;
-      return <li>Namn: {item.tracks[0].name}, Börja: {date}</li>
+      return <li key={idx}>Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
     })
 
-    const listResults = results.map((item) => {
+    const listResults = results.map((item, idx) => {
       const dateToFormat = item.startTime;
       const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
         {dateToFormat}
       </Moment>;
-      return <li>Namn: {item.tracks[0].name}, Börja: {date}</li>
+      return <li key={idx} >Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
     })
 
     console.log(results);
@@ -40,6 +69,8 @@ class GameSchedule extends Component {
           <ul>
            {listUpcoming}
           </ul>
+          <div>
+          </div>
           <h3>Resultat</h3>
           <ul>
             {listResults}
