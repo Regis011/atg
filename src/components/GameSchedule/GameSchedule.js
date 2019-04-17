@@ -52,7 +52,9 @@ class GameSchedule extends Component {
       const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
         {dateToFormat}
       </Moment>;
-      return <li key={idx}>Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
+      return <li className="collection-item" key={idx}>
+        <div className="text_list"> Plats: {item.tracks[0].name}, Börja: {date} </div>
+        <div className="button_list"><button className="waves-effect waves-light btn" id={item.id} onClick={this.handleClick}>Läs mer</button></div></li>
     })
 
     const listResults = results.map((item, idx) => {
@@ -60,7 +62,10 @@ class GameSchedule extends Component {
       const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
         {dateToFormat}
       </Moment>;
-      return <li key={idx} >Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
+      return <li className="collection-item" key={idx} >
+        <div className="text_list">Plats: {item.tracks[0].name}, Börja: {date} </div>
+        <div className="button_list"><button className="waves-effect waves-light btn" id={item.id} onClick={this.handleClick}>Läs mer</button></div>
+        </li>
     })
 
     return (
@@ -69,7 +74,7 @@ class GameSchedule extends Component {
         <div>{name}</div>
         <div className="game_schedule_in">
           <h3>Kommande spel</h3>
-          <ul>
+          <ul className="collection">
            {listUpcoming}
           </ul>
           { state.expanded ?
@@ -78,7 +83,7 @@ class GameSchedule extends Component {
           <div>
           </div>
           <h3>Resultat</h3>
-          <ul>
+          <ul className="collection">
             {listResults}
           </ul>
         </div>

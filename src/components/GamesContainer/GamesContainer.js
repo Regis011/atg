@@ -38,7 +38,9 @@ class GamesContainer extends Component {
 
     return (
       <div className="games_container">
-        <GamesList items={this.props} />
+        <div className="row">
+          <GamesList items={this.props} />
+        </div>
       </div>
     );
   }

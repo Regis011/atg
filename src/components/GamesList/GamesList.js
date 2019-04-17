@@ -53,12 +53,14 @@ class GamesList extends Component {
     });
 
     return (
-      <div className="games_list">
-        <h2>ATG spel information</h2>
-        <select id="select_games" onChange={this.handleChange} value={this.state.value}>
-          <option value='' key={-1}>Välj spel</option>
-          {gamesList}
-        </select>
+      <div className="games_list col s10 offset-s1">
+        <div className="input-field col s12">
+          <h2>ATG spel information</h2>
+          <select id="select_games" onChange={this.handleChange} value={this.state.value}>
+            <option value='' key={-1}>Välj spel</option>
+            {gamesList}
+          </select>
+        </div>
         { data.length > 0 ? <GameSchedule data={data} /> : '' }
       </div>
     );
