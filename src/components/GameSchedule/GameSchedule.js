@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Moment from 'react-moment';
 import axios from 'axios';
 
-import './GameSchedule.css';
-
+import './GameSchedule.scss';
+import Modal from '../Modal/Modal'
 
 class GameSchedule extends Component {
 
@@ -11,71 +11,100 @@ class GameSchedule extends Component {
    super(props)
 
    this.state = {
-     openGame: []
+     openGame: [],
+     isLoadin: false,
+     isShowing: false
    }
 
    this.handleClick = this.handleClick.bind(this);
-
+   this.openModal = this.openModal.bind(this);
+   this.closeModal = this.closeModal.bind(this);
  }
 
  handleClick(e){
-    console.log('click');
-    console.log(e.target.id);
-    //const id = e.target.id;
-    // const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    // const url = `https://www.atg.se/services/racinginfo/v1/api/games/${id}`;
-    // const res = axios.get(proxyurl + url)
-    //   .then(function (response) {
-    //     return response.data;
-    //   })
-    //   .catch(function (error) {
-    //     console.log('error', error)
-    //   });
+    const id = e.target.id;
+    this.setState({
+      isLoadin: true,
+      isShowing: true
+    })
 
-    //this.setState({openGame: res});
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://www.atg.se/services/racinginfo/v1/api/games/${id}`;
+    axios.get(proxyurl + url)
+      .then((response) => {
+        this.setState({
+          openGame: response.data,
+          isLoadin: false
+        })
+      })
+      .catch((error) => {
+        console.log('error', error)
+      });
+  }
+
+  openModal() {
+    this.setState({
+      isShowing: true
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      isShowing: false
+    });
   }
 
   render() {
-
     const { data } = this.props;
-    const name = data[0] ? data[0].name : '';
-    const upcoming = data[0] ? data[0].data.upcoming : '';
-    const results = data[0] ? data[0].data.results : '';
-
-    const listUpcoming = upcoming.map((item, idx) => {
-      const dateToFormat = item.startTime;
-      const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
-        {dateToFormat}
-      </Moment>;
-      return <li key={idx}>Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
-    })
-
-    const listResults = results.map((item, idx) => {
-      const dateToFormat = item.startTime;
-      const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
-        {dateToFormat}
-      </Moment>;
-      return <li key={idx} >Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
-    })
-
-    console.log(results);
+    console.log(data);
+    const state = this.state;
+    const name = data[0] ? data[0].name : null;
+    const upcoming = data[0] ? data[0].data.upcoming : null;
+    const results = data[0] ? data[0].data.results : null;
 
     return (
       <div className="game_schedule">
         <h2>Spel Information</h2>
-        <div>{name}</div>
+
         <div className="game_schedule_in">
           <h3>Kommande spel</h3>
-          <ul>
-           {listUpcoming}
+          <ul className="collection">
+           { upcoming && upcoming.length > 0 ?
+             upcoming.map((item, idx) => {
+               const dateToFormat = item.startTime;
+               const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
+                 {dateToFormat}
+               </Moment>;
+               return <li className="collection-item" key={idx}>
+                 <div className="text_list"> Plats: {item.tracks[0].name}, Börja: {date} </div>
+                 <div className="button_list"><a href="#modal1" className="waves-effect waves-light btn" id={item.id} onClick={this.handleClick}>Läs mer</a></div></li>
+             })
+              : 'Data missing' }
           </ul>
-          <div>
-          </div>
           <h3>Resultat</h3>
-          <ul>
-            {listResults}
+          <ul className="collection">
+            { results && results.length > 0 ?
+              results.map((item, idx) => {
+                const dateToFormat = item.startTime;
+                const date = <Moment format="YYYY-MM-DD HH:mm" withTitle>
+                  {dateToFormat}
+                </Moment>;
+                return <li className="collection-item" key={idx} >
+                  <div className="text_list">Plats: {item.tracks[0].name}, Börja: {date} </div>
+                  <div className="button_list"><button className="waves-effect waves-light btn" id={item.id} onClick={this.handleClick}>Läs mer</button></div>
+                  </li>
+              })
+              : 'Data missing'}
           </ul>
         </div>
+
+        <Modal
+            className="modal"
+            show={this.state.isShowing}
+            close={this.closeModal}
+            data={state.openGame}
+            >
+        </Modal>
       </div>
     );
 

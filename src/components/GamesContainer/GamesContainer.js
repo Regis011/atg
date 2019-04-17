@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import './GamesContainer.css';
+import './GamesContainer.scss';
 
 import GamesList from '../GamesList/GamesList';
 
@@ -38,7 +38,9 @@ class GamesContainer extends Component {
 
     return (
       <div className="games_container">
-        <GamesList items={this.props} />
+        <div className="row">
+          <GamesList items={this.props} />
+        </div>
       </div>
     );
   }
