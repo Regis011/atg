@@ -3,7 +3,7 @@ import Moment from 'react-moment';
 import axios from 'axios';
 
 import './GameSchedule.css';
-
+import GameData from '../GameData/GameData';
 
 class GameSchedule extends Component {
 
@@ -11,33 +11,38 @@ class GameSchedule extends Component {
    super(props)
 
    this.state = {
+     expanded: false,
      openGame: []
    }
 
    this.handleClick = this.handleClick.bind(this);
-
+   this.closeGameData = this.closeGameData.bind(this);
  }
 
  handleClick(e){
-    console.log('click');
-    console.log(e.target.id);
-    //const id = e.target.id;
-    // const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    // const url = `https://www.atg.se/services/racinginfo/v1/api/games/${id}`;
-    // const res = axios.get(proxyurl + url)
-    //   .then(function (response) {
-    //     return response.data;
-    //   })
-    //   .catch(function (error) {
-    //     console.log('error', error)
-    //   });
+    const id = e.target.id;
 
-    //this.setState({openGame: res});
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://www.atg.se/services/racinginfo/v1/api/games/${id}`;
+    axios.get(proxyurl + url)
+      .then((response) => {
+        this.setState({
+          openGame: response.data,
+          expanded: true
+        })
+      })
+      .catch((error) => {
+        console.log('error', error)
+      });
+  }
+
+  closeGameData(){
+    this.setState({ expanded: false })
   }
 
   render() {
-
     const { data } = this.props;
+    const state = this.state;
     const name = data[0] ? data[0].name : '';
     const upcoming = data[0] ? data[0].data.upcoming : '';
     const results = data[0] ? data[0].data.results : '';
@@ -58,8 +63,6 @@ class GameSchedule extends Component {
       return <li key={idx} >Plats: {item.tracks[0].name}, Börja: {date} <button id={item.id} onClick={this.handleClick}>Läs mer</button></li>
     })
 
-    console.log(results);
-
     return (
       <div className="game_schedule">
         <h2>Spel Information</h2>
@@ -69,6 +72,9 @@ class GameSchedule extends Component {
           <ul>
            {listUpcoming}
           </ul>
+          { state.expanded ?
+            <GameData data={ state.openGame }  closeGameData={ this.closeGameData }/> : ''
+          }
           <div>
           </div>
           <h3>Resultat</h3>
