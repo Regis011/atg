@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import './GamesContainer.css';
+import './GamesContainer.scss';
 
 import GamesList from '../GamesList/GamesList';
 

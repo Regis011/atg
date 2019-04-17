@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './GamesList.css';
+import './GamesList.scss';
 
 import GameSchedule from '../GameSchedule/GameSchedule';
 

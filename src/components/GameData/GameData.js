@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Moment from 'react-moment';
 
-import './GameData.css';
+import './GameData.scss';
 
 
 class GameData extends Component {

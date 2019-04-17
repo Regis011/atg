@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Moment from 'react-moment';
 import axios from 'axios';
 
-import './GameSchedule.css';
+import './GameSchedule.scss';
 import GameData from '../GameData/GameData';
 
 class GameSchedule extends Component {
